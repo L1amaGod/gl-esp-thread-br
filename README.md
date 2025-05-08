@@ -21,8 +21,9 @@
 - [gl-esp-sdk](https://github.com/L1amaGod/gl-esp-sdk/)
 
   ```
-  git clone https://github.com/gl-inet/gl-esp-sdk.git
-  cd gl-esp-sdk
+  cd ~/
+  git clone https://github.com/espressif/esp-idf.git -b v5.1.3
+  cd ~/esp-idf
   git submodule update --init --recursive --progress
   ```
 
@@ -33,7 +34,7 @@
   In order to install tools for all supported targets please run the following command:
 
   ```
-  cd ~/gl-esp-sdk/
+  cd ~/esp-idf
   ./install.sh all
   ```
 
@@ -44,12 +45,12 @@
 - In the terminal where you are going to use ESP-IDF, run:
 
   ```
-  . ~/gl-esp-sdk/export.sh
+  . ~/esp-idf/export.sh
   ```
 
 
 
-More details about installation in [ESP Installation Guide](https://docs.espressif.com/projects/esp-idf/en/v5.1.3/esp32/get-started/linux-macos-setup.html).
+More details about installation in [ESP Installation Guide](https://docs.espressif.com/projects/~/esp-idf/en/v5.1.3/esp32/get-started/linux-macos-setup.html).
 
 
 
@@ -58,8 +59,9 @@ More details about installation in [ESP Installation Guide](https://docs.espress
 ### building
 
 ```
-. gl-esp-sdk/export.sh
-cd gl-esp-sdk/examples/glinet/gl-s20-thread-br/examples/basic_thread_border_router
+git clone https://github.com/gl-inet/gl-esp-thread-br
+cd gl-esp-thread-br/examples/gl_s20_thread_border_router
+. ~/esp-idf/export.sh
 idf.py build
 ```
 
@@ -70,7 +72,7 @@ idf.py build
 - Use command to generate firmware into your GL-S20
 
   ```
-  cd ./build
+  cd gl-esp-thread-br/examples/gl_s20_thread_border_router/build
   esptool.py --chip esp32s3 merge_bin --output ../gl-s20-combine.bin $(cat ./flash_args)
   ```
   
