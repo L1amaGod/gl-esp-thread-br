@@ -1,3 +1,89 @@
+# Getting Started
+
+## Requirements
+
+- Ubuntu 20.04 LTS or later
+
+
+
+## Install dependencies
+
+### 1. Install Prerequisites
+
+- To compile using ESP-IDF you will need to get the following packages.
+
+  ```
+  sudo apt-get install git wget flex bison gperf python3 python3-pip python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0
+  ```
+
+### 2. Download gl-esp-sdk
+
+- [gl-esp-sdk](https://github.com/L1amaGod/gl-esp-sdk/)
+
+  ```
+  git clone https://github.com/gl-inet/gl-esp-sdk.git
+  cd gl-esp-sdk
+  git submodule update --init --recursive --progress
+  ```
+
+### 3. Set up the tools
+
+- Aside from the ESP-IDF, you also need to install the tools used by ESP-IDF, such as the compiler, debugger, Python packages, etc, for projects supporting ESP32.
+
+  In order to install tools for all supported targets please run the following command:
+
+  ```
+  cd ~/gl-esp-sdk/
+  ./install.sh all
+  ```
+
+### 4. Set up the environment variables
+
+- The installed tools are not yet added to the PATH environment variable. To make the tools usable from the command line, some environment variables must be set. ESP-IDF provides another script which does that.
+
+- In the terminal where you are going to use ESP-IDF, run:
+
+  ```
+  . ~/gl-esp-sdk/export.sh
+  ```
+
+
+
+More details about installation in [ESP Installation Guide](https://docs.espressif.com/projects/esp-idf/en/v5.1.3/esp32/get-started/linux-macos-setup.html).
+
+
+
+## Build Thread Border Router demo for GL-S20 hardware
+
+### building
+
+```
+. gl-esp-sdk/export.sh
+cd gl-esp-sdk/examples/glinet/gl-s20-thread-br/examples/basic_thread_border_router
+idf.py build
+```
+
+
+
+### flashing
+
+- Use command to generate firmware into your GL-S20
+
+  ```
+  cd ./build
+  esptool.py --chip esp32s3 merge_bin --output ../gl-s20-combine.bin $(cat ./flash_args)
+  ```
+  
+  > It will generate a firmware file named **gl-s20-combine.bin**
+
+- Flash the `gl-s20-combine.bin` into your GL-S20 with ESP [flash_download_tool](https://www.espressif.com/en/support/download/other-tools).
+
+  ![image-20250425110135225](docs/images/gl-s20-flash-settings.png)
+
+  > Check [guide](https://docs.gl-inet.com/iot/en/thread_board_router/gl-s20/user_manual/flash_guide/) for more details about flashing firmware to GL-S20 .
+
+
+
 # ESP Thread Boarder Router SDK
 
 ESP-THREAD-BR is the official [ESP Thread Border Router](https://openthread.io/guides/border-router/espressif-esp32) SDK. It supports all fundamental network features to build a Thread Border Router and integrates rich product level features for quick productization.
@@ -8,53 +94,7 @@ ESP-THREAD-BR is the official [ESP Thread Border Router](https://openthread.io/g
 
 The SDK is built on top of [ESP-IDF](https://github.com/espressif/esp-idf) and [OpenThread](https://github.com/openthread/openthread). The OpenThread port and ESP Border Router implementation is provided as pre-built library in ESP-IDF.
 
-# Hardware Platforms
 
-## Wi-Fi based Thread Border Router
-
-The Wi-Fi based ESP Thread Border Router consists of two SoCs:
-
-* An ESP32 series Wi-Fi SoC (ESP32, ESP32-C, ESP32-S, etc) loaded with ESP Thread Border Router and OpenThread Stack.
-* An ESP32-H 802.15.4 SoC loaded with OpenThread RCP.
-
-### ESP Thread Border Router Board
-
-The ESP Thread border router board provides an integrated module of an ESP32-S3 SoC and an ESP32-H2 RCP.
-
-![br_dev_kit](docs/images/esp-thread-border-router-board.png)
-
-The two SoCs are connected with following interfaces:
-* UART and SPI for serial communication
-* RESET and BOOT pins for RCP Update
-* 3-Wires PTA for RF coexistence
-
-### Standalone Modules
-
-The SDK also supports manually connecting an ESP32-H2 RCP to an ESP32 series Wi-Fi SoC.
-
-ESP32 pin           | ESP32-H2 pin
---------------------|-------------
-  GND               |     G
-  GPIO17 (UART RX)  |     TX
-  GPIO18 (UART TX)  |     RX
-  GPIO7             |     RST
-  GPIO8  (SPI INTR) |     GPIO9 (BOOT)
-  GPIO10 (SPI CS)   |     GPIO2
-  GPIO11 (SPI MOSI) |     GPIO3
-  GPIO12 (SPI CLK)  |     GPIO0
-  GPIO13 (SPI MISO) |     GPIO1
-
-Note that the SPI GPIOs are optional, if the UART is selected for communication.
-
-The following image shows an example connection between ESP32 DevKitC and ESP32-H2 DevKitC:
-
-![br_standalone](docs/images/thread-border-router-esp32-esp32h2.jpg)
-
-In this setup, only UART interface is connected, so it doesn't support RCP Update or RF Coexistence features. You can refer to [ot_br](https://github.com/espressif/esp-idf/tree/master/examples/openthread/ot_br) example in esp-idf as a quick start.
-
-## Ethernet based Thread Border Router
-
-Similar to the previous Wi-Fi based Thread Border Router setup, but a device with Ethernet interface is required, such as [ESP32-Ethernet-Kit](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/hw-reference/esp32/get-started-ethernet-kit.html).
 
 # Provided Features
 
@@ -69,12 +109,3 @@ These features are currently provided by the SDK:
 * **Web GUI**: The border router will enable a web server and provide some practical functions including Thread network discovery, network formation and status query. 
 * **RF Coexistence**: The border router supports optional external coexistence, a feature that enhances the transmission performance when there are channel conflicts between the Wi-Fi and Thread networks.
 
-# Resources
-
-* Documentation for the latest version: https://docs.espressif.com/projects/esp-thread-br/. This documentation is built from the [docs directory](docs) of this repository.
-
-* The [esp32.com forum](https://esp32.com/) is a place to ask questions and find community resources.
-
-* [Check the Issues section on github](https://github.com/espressif/esp-thread-br/issues) if you find a bug or have a feature request. Please check existing Issues before opening a new one.
-
-* If you're interested in contributing to ESP-THREAD-BR, please check the [Contributions Guide](https://docs.espressif.com/projects/esp-idf/en/latest/contribute/index.html).
