@@ -69,6 +69,12 @@ idf.py build
 
 ### flashing
 
+- Flash firmware with idf.py in Linux
+  ```
+  idf.py erase-flash
+  idf.py flash -p /dev/ttyUSB0
+  ```
+
 - Use command to generate firmware into your GL-S20
 
   ```
